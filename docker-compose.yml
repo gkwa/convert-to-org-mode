@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+
+  receive:
+    container_name: receiver
+    ports:
+      - "127.0.0.1:8989:5000"
+    image: taylorm/receive
+    build: receive
+    restart: unless-stopped
+    working_dir: "/"
+    volumes:
+      - "/tmp/scratch:/tmp/scratch"
+      - "/var/run/docker.sock:/var/run/docker.sock"
