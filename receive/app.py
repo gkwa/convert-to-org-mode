@@ -94,6 +94,25 @@ def miscellaneous_html_updates(html_path, url):
         app.logger.warning(stderr)
 
 
+def generate_org(html_path, org_path):
+    cmd = [
+        "docker",
+        "run",
+        "-v",
+        f"{html_path.parent}:{html_path.parent}",
+        "pandoc/core",
+        "--from=html",
+        "--to=org",
+        f"--output={str(org_path)}",
+        str(html_path),
+    ]
+    process = subprocess.Popen(
+        cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=html_path.parent
+    )
+    _, stderr = process.communicate()
+    app.logger.debug(" ".join(cmd))
+
+
 def generate_filename_stem(base):
     stem = base
 
@@ -126,6 +145,8 @@ def save_and_process():
         mime_path = scratch_dir / f"{stem}.mime"
         html_path_orig = scratch_dir / f"{stem}-orig.html"
         html_path = scratch_dir / f"{stem}.html"
+        org_path = scratch_dir / f"{stem}.org.tmp"
+        org_path_final = scratch_dir / f"{stem}.org"
         tidy_path = scratch_dir / f"{stem}-tidy.html"
 
         scratch_dir.mkdir(exist_ok=True)
@@ -135,6 +156,8 @@ def save_and_process():
         shutil.copy(str(html_path), str(tidy_path))
         miscellaneous_html_updates(html_path, url)
         tidy2(html_path)
+        generate_org(html_path, org_path)
+        shutil.move(str(org_path), str(org_path_final))
 
     resp = flask.jsonify(success=True)
     return resp
