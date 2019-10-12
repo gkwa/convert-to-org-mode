@@ -35,6 +35,27 @@ def tidy(html_path, tidy_path):
         app.logger.warning(stderr)
 
 
+def tidy2(html_path):
+    cmd = [
+        "docker",
+        "run",
+        "-v",
+        f"{html_path.parent}:{html_path.parent}",
+        "taylorm/tidy",
+        "-file",
+        str(html_path.parent.joinpath(f"{html_path.stem}-tidy-errors2.log")),
+        str(html_path),
+    ]
+
+    app.logger.debug(" ".join(cmd))
+    process = subprocess.Popen(
+        cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=html_path.parent
+    )
+    _, stderr = process.communicate()
+    if stderr:
+        app.logger.warning(stderr)
+
+
 def mime_to_html(data, mime_path, html_path, html_path_orig):
     """ convert back from base64 to UTF-8 or ISO-8859-1 """
 
@@ -113,6 +134,7 @@ def save_and_process():
         tidy(html_path, tidy_path)
         shutil.copy(str(html_path), str(tidy_path))
         miscellaneous_html_updates(html_path, url)
+        tidy2(html_path)
 
     resp = flask.jsonify(success=True)
     return resp
