@@ -26,6 +26,129 @@ def cleanup1(match):
     return match.group("markup")
 
 
+def transform(text):
+    text = re.sub(
+        r"""
+            # get rid of extra spacing around brackets
+            # [[url][ url ]] -> [[url][url]]
+            \[
+                \[\s*(.*?)\s*\]
+                \[\s*(.*?)\s*\]
+            \]
+        """,
+        lambda match: f"[[{match.group(1)}][{match.group(2)}]]",
+        text,
+        flags=re.VERBOSE,
+    )
+
+    text = re.sub(
+        r"#\+BEGIN_HTML(.*?)#\+END_HTML",
+        lambda match: html_example_to_text(
+            match.group(1)
+        ),  # call to_text for each match
+        text,
+        flags=re.IGNORECASE | re.DOTALL,
+    )
+
+    text = re.sub(r":PROPERTIES:.*?:END:", "", text, flags=re.IGNORECASE | re.DOTALL)
+    text = text.replace("\u00A0", " ")
+    text = re.sub(r"(\\\\)[\r\n]", "\n", text)
+
+    text = re.sub(
+        r"""
+            # remove [[]] and [[ ]]
+            \[\[
+                \s*
+            \]\]
+        """,
+        "",
+        text,
+        flags=re.VERBOSE,
+    )
+
+    reg_url = re.compile(
+        r"""
+            # remove extra brackets around urls: Convert #1 to #2
+            # 1: [[https://www.facebook.com/GeeksforGeeks-316764689022/timeline/][]]
+            # 2: https://www.facebook.com/GeeksforGeeks-316764689022/timeline/
+            \[\[                                              # pesky brackets
+            (?P<url>                                          # start named group
+                ({url_rs})                                    # valid url characters
+                ?                                             # handle case: [[][]]
+            )                                                 # end group
+            \]\[                                              #
+                (?://)*                                       # handle [[][//]]
+            \]\]                                              # pesky brackets
+        """.format(
+            url_rs=url_rs
+        ),
+        flags=re.IGNORECASE | re.VERBOSE,
+    )
+    text = re.sub(reg_url, lambda match: f' {match.group("url")} ', text)
+
+    reg_url = re.compile(
+        r"""
+            # [[][Products]] -> Products
+            \[
+                \[\]
+                \[
+                    ([^\]]+)
+                \]
+             \]
+        """.format(
+            url_rs=url_rs
+        ),
+        flags=re.VERBOSE,
+    )
+    text = re.sub(reg_url, lambda match: match.group(1), text)
+
+    reg_url = re.compile(
+        r"""
+            \[\[
+            (?P<url>
+                ({url_rs}) | [^\]]*?
+            )
+            \]\[
+            (?://)*
+            \]\]
+        """.format(
+            url_rs=url_rs
+        ),
+        flags=re.IGNORECASE | re.VERBOSE,
+    )
+    text = re.sub(reg_url, lambda match: f' {match.group("url")} ', text)
+
+    reg_url = re.compile(
+        r"""(?P<markup>(
+            \[
+                \[(?P<url>([^\]]+))\]
+                \[(?P<text>([^\]]+))\]
+            \])
+        )""",
+        flags=re.IGNORECASE | re.VERBOSE,
+    )
+    text = re.sub(reg_url, lambda match: cleanup1(match), text)
+
+    reg_whitespace = re.compile(
+        r"""
+            (?:\s+\n+)+
+        """,
+        flags=re.VERBOSE,
+    )
+    text = re.sub(reg_whitespace, "\n\n", text)
+
+    ir = "|".join(
+        ["footer", "header", "locationline", "logo", "pagebottom", "sidebar", "star"]
+    )
+    ir = f"<<{0}>>".format(ir)
+    ir = re.compile(ir)
+    text = re.sub(ir, "", text)
+
+    text = re.sub("\n{3,}", "\n", text)
+
+    return text
+
+
 def remove_attrs(soup, attrs):
     """ example: convert #1 to #2
     #1: <div class="status" id="postamble">

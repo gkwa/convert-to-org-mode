@@ -26,6 +26,7 @@ logger.addHandler(ch)
 parser = argparse.ArgumentParser(description="Short sample app")
 parser.add_argument("--url", action="store")
 parser.add_argument("--html", default="out.html", action="store")
+parser.add_argument("--org", action="store")
 parser.add_argument("--fix-html", action="store_true")
 args = parser.parse_args()
 html_path = pathlib.Path(args.html)
@@ -34,3 +35,9 @@ if args.fix_html:
     html = html_path.read_text()
     html = transform.customize(html, args.url)
     html_path.write_text(html)
+
+if args.org:
+    org_path = pathlib.Path(args.org)
+    text = transform.transform(org_path.read_text())
+    logger.debug(f"writing to {org_path.resolve()}")
+    org_path.write_text(text)
