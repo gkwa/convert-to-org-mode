@@ -6,6 +6,10 @@ services:
     image: taylorm/tidy
     build: tidy
 
+  pandoc_cleanup:
+    image: taylorm/pandoc_cleanup
+    build: pandoc_cleanup
+
   receive:
     container_name: receiver
     ports:

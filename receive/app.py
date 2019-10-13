@@ -51,6 +51,28 @@ def mime_to_html(data, mime_path, html_path, html_path_orig):
     app.logger.debug(f"{html_path.resolve()} written")
 
 
+def miscellaneous_html_updates(html_path, url):
+    cmd = [
+        "docker",
+        "run",
+        "-v",
+        f"{html_path.parent}:{html_path.parent}",
+        "taylorm/pandoc_cleanup",
+        "--html",
+        str(html_path),
+        "--fix-html",
+        "--url",
+        url,
+    ]
+    app.logger.debug(" ".join(cmd))
+    process = subprocess.Popen(
+        cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=html_path.parent
+    )
+    _, stderr = process.communicate()
+    if stderr:
+        app.logger.warning(stderr)
+
+
 def generate_filename_stem(base):
     stem = base
 
@@ -73,6 +95,7 @@ def save_and_process():
     if flask.request.method == "POST":
         content = flask.request.get_json()
 
+        url = content["url"]
         data = content["data"]
         title = content["title"]
 
@@ -89,6 +112,7 @@ def save_and_process():
         mime_to_html(data, mime_path, html_path, html_path_orig)
         tidy(html_path, tidy_path)
         shutil.copy(str(html_path), str(tidy_path))
+        miscellaneous_html_updates(html_path, url)
 
     resp = flask.jsonify(success=True)
     return resp
