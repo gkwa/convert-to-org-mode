@@ -2,6 +2,10 @@ version: '3'
 
 services:
 
+  tidy:
+    image: taylorm/tidy
+    build: tidy
+
   receive:
     container_name: receiver
     ports:

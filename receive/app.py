@@ -1,7 +1,9 @@
 import base64
 import pathlib
 import re
+import shutil
 import string
+import subprocess
 
 import contractions
 import flask
@@ -10,6 +12,27 @@ import flask_cors
 
 app = flask.Flask(__name__)
 cors = flask_cors.CORS(app, resources={r"/*": {"origins": "*"}})
+
+
+def tidy(html_path, tidy_path):
+    cmd = [
+        "docker",
+        "run",
+        "-v",
+        f"{html_path.parent}:{html_path.parent}",
+        "taylorm/tidy",
+        "-file",
+        str(html_path.parent.joinpath(f"{html_path.stem}-tidy-errors.log")),
+        str(html_path),
+    ]
+
+    app.logger.debug(" ".join(cmd))
+    process = subprocess.Popen(
+        cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=html_path.parent
+    )
+    _, stderr = process.communicate()
+    if stderr:
+        app.logger.warning(stderr)
 
 
 def mime_to_html(data, mime_path, html_path, html_path_orig):
@@ -59,10 +82,13 @@ def save_and_process():
         mime_path = scratch_dir / f"{stem}.mime"
         html_path_orig = scratch_dir / f"{stem}-orig.html"
         html_path = scratch_dir / f"{stem}.html"
+        tidy_path = scratch_dir / f"{stem}-tidy.html"
 
         scratch_dir.mkdir(exist_ok=True)
         mime_path.write_text(data)
         mime_to_html(data, mime_path, html_path, html_path_orig)
+        tidy(html_path, tidy_path)
+        shutil.copy(str(html_path), str(tidy_path))
 
     resp = flask.jsonify(success=True)
     return resp
