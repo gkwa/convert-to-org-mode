@@ -1,7 +1,7 @@
 (setq-default sentence-end-double-space nil)
 
 (defun reformat-paragraph-with-line-spacing-to-end-of-file()
-  "do stuff"
+  "loop over all paragraphs, reformatting as we go"
   (interactive)
   (save-excursion
     (while (not (eobp))
@@ -9,7 +9,7 @@
       (re-search-forward "[[:space:]]*"))))
 
 (defun reformat-paragraph-with-line-spacing ()
-  "do mything"
+  "reformat paragraph at point"
   (interactive)
   (catch 'mytag
     (progn
