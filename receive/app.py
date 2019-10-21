@@ -132,6 +132,25 @@ def pandoc_cleanup_org(org_path):
         app.logger.warning(stderr)
 
 
+def emacs_cleanup_org(org_path):
+    cmd = [
+        "docker",
+        "run",
+        "-v",
+        f"{org_path.parent}:{org_path.parent}",
+        "taylorm/emacs_cleanup",
+        "-f",
+        str(org_path),
+    ]
+    app.logger.debug(" ".join(cmd))
+    process = subprocess.Popen(
+        cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=org_path.parent
+    )
+    _, stderr = process.communicate()
+    if stderr:
+        app.logger.warning(stderr)
+
+
 def generate_filename_stem(base):
     stem = base
 
@@ -177,6 +196,7 @@ def save_and_process():
         tidy2(html_path)
         generate_org(html_path, org_path)
         pandoc_cleanup_org(org_path)
+        emacs_cleanup_org(org_path)
         shutil.move(str(org_path), str(org_path_final))
 
     resp = flask.jsonify(success=True)

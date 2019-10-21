@@ -10,6 +10,10 @@ services:
     image: taylorm/pandoc_cleanup
     build: pandoc_cleanup
 
+  emacs_cleanup:
+    image: taylorm/emacs_cleanup
+    build: emacs_cleanup
+
   pandoc:
     image: pandoc/core
 
