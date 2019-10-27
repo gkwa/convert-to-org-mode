@@ -3,6 +3,7 @@ import pathlib
 import re
 import string
 
+import contractions
 import flask
 
 import flask_cors
@@ -15,6 +16,7 @@ def generate_filename_stem(base):
     stem = base
 
     stem = stem.lower()
+    stem = contractions.expandContractions(stem)
 
     # replace non-keep characters with hyphen
     keep = string.ascii_letters + string.digits + " "
