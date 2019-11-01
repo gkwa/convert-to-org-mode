@@ -1,3 +1,13 @@
+// ==UserScript==
+// @name      convert-to-org-mode
+// @namespace https://taylorm.net
+// @version   1
+// @match     *://*/*
+// @grant     none
+// @require   https://craig.is/assets/js/mousetrap/mousetrap.min.js?9d308
+// @require   file:///Users/mtm/pdev/taylormonacelli/convert-to-org-mode/initiate.js
+// ==/UserScript==
+
 function b64EncodeUnicode(str) {
   // first we use encodeURIComponent to get percent-encoded UTF-8,
   // then we convert the percent encodings into raw bytes which
