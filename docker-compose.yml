@@ -18,7 +18,6 @@ services:
     image: pandoc/core
 
   receive:
-    container_name: receiver
     ports:
       - "127.0.0.1:8989:5000"
     image: taylorm/receive
