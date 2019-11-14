@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name      Send page to flask app
+// @name      convert-to-org-mode
 // @namespace https://taylorm.net
 // @version   1
 // @match     *://*/*
