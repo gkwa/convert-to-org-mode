@@ -3,25 +3,21 @@ version: '3'
 services:
 
   tidy:
-    image: taylorm/tidy
     build: tidy
 
   pandoc_cleanup:
-    image: taylorm/pandoc_cleanup
     build: pandoc_cleanup
 
   emacs_cleanup:
-    image: taylorm/emacs_cleanup
     build: emacs_cleanup
 
   pandoc:
     image: pandoc/core
 
-  receive:
+  flask-receive-html:
+    build: receive
     ports:
       - "127.0.0.1:8989:5000"
-    image: taylorm/receive
-    build: receive
     restart: unless-stopped
     working_dir: "/"
     volumes:
