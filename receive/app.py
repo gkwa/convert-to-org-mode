@@ -152,19 +152,18 @@ def emacs_cleanup_org(org_path):
 
 
 def generate_filename_stem(title, host):
-    stem = f"{host}-{title}"
+    stem = f"app-{host}-{title}"
+    keep = string.ascii_letters + string.digits + " "
 
     stem = stem.lower()
     stem = contractions.expandContractions(stem)
 
     # replace non-keep characters with hyphen
-    keep = string.ascii_letters + string.digits + " "
-    stem = re.sub(f"[^{''.join({keep})}]", "-", stem)
-    stem = stem.replace(" ", "-")
-    stem = f"app-{stem}"
+    stem = re.sub(f"[^{keep}]", "-", stem)
+    stem = re.sub(" ", "-", stem)
     stem = re.sub("-{2,}", "-", stem)
-    stem = stem[:100]
     stem = re.sub("-+$", "", stem)
+    stem = stem[:100]
     return stem
 
 
