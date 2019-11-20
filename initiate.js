@@ -27,6 +27,7 @@ const sendPageToPort = async () => {
   console.log(encodedString);
 
   let data_dict = {
+    host: window.location.host,
     url: document.URL,
     data: encodedString,
     title: document.title

@@ -151,8 +151,8 @@ def emacs_cleanup_org(org_path):
         app.logger.warning(stderr)
 
 
-def generate_filename_stem(base):
-    stem = base
+def generate_filename_stem(title, host):
+    stem = f"{host}-{title}"
 
     stem = stem.lower()
     stem = contractions.expandContractions(stem)
@@ -163,7 +163,7 @@ def generate_filename_stem(base):
     stem = stem.replace(" ", "-")
     stem = f"app-{stem}"
     stem = re.sub("-{2,}", "-", stem)
-    stem = stem[:70]
+    stem = stem[:100]
     stem = re.sub("-+$", "", stem)
     return stem
 
@@ -174,10 +174,11 @@ def save_and_process():
         content = flask.request.get_json()
 
         url = content["url"]
+        host = content["host"]
         data = content["data"]
         title = content["title"]
 
-        stem = generate_filename_stem(title)
+        stem = generate_filename_stem(title, host)
 
         scratch_dir = pathlib.Path("/tmp/scratch").resolve()
         mime_path = scratch_dir / f"{stem}.mime"
