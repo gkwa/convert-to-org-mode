@@ -3,10 +3,19 @@
 // @namespace https://taylorm.net
 // @version   1
 // @match     *://*/*
-// @grant     none
+// @grant     GM_addStyle
+// @grant     GM_getResourceText
+// @grant     GM_getResourceURL
 // @require   https://craig.is/assets/js/mousetrap/mousetrap.min.js?9d308
+// @require   https://cdn.jsdelivr.net/npm/alertifyjs@1.12.0/build/alertify.min.js
+// @require   file:///Users/mtm/pdev/taylormonacelli/convert-to-org-mode/library.js
 // @require   file:///Users/mtm/pdev/taylormonacelli/convert-to-org-mode/initiate.js
+// @resource  alertifyCSS https://cdnjs.cloudflare.com/ajax/libs/AlertifyJS/1.12.0/css/alertify.min.css
+// @resource  alertifyThemeCSS https://cdnjs.cloudflare.com/ajax/libs/AlertifyJS/1.12.0/css/themes/default.min.css
 // ==/UserScript==
+
+document.head.appendChild(cssElement(GM_getResourceURL("alertifyCSS")));
+document.head.appendChild(cssElement(GM_getResourceURL("alertifyThemeCSS")));
 
 function b64EncodeUnicode(str) {
   // first we use encodeURIComponent to get percent-encoded UTF-8,
@@ -42,7 +51,18 @@ const sendPageToPort = async () => {
   }
 
   let url = "http://127.0.0.1:8989/";
-  let response = await fetch(url, options);
+  publish(url, options)
+    .then(data => {
+      console.log(data);
+      alertify.notify("ALL GOOD", "success", 2.0, function() {
+        console.log("dismissed");
+      });
+    })
+    .catch(reason => {
+      alertify.notify(reason, "error", 5, function() {
+        console.log("dismissed");
+      });
+    });
 }
 
 (function () {
