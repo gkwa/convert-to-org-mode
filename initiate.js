@@ -54,12 +54,12 @@ const sendPageToPort = async () => {
   publish(url, options)
     .then(data => {
       console.log(data);
-      alertify.notify("ALL GOOD", "success", 2.0, function() {
+      alertify.notify("ALL GOOD", "success", 0, function() {
         console.log("dismissed");
       });
     })
     .catch(reason => {
-      alertify.notify(reason, "error", 5, function() {
+      alertify.notify(reason, "error", 0, function() {
         console.log("dismissed");
       });
     });
