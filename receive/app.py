@@ -162,8 +162,8 @@ def generate_filename_stem(title, host):
     stem = re.sub(f"[^{keep}]", "-", stem)
     stem = re.sub(" ", "-", stem)
     stem = re.sub("-{2,}", "-", stem)
-    stem = re.sub("-+$", "", stem)
     stem = stem[:100]
+    stem = re.sub("-+$", "", stem)
     return stem
 
 
