@@ -52,7 +52,7 @@ const sendPageToPort = async () => {
   let options;
 
   encodedString = b64EncodeUnicode(innerHTML);
-  console.log(encodedString);
+  console.log(`data substring:${encodedString.substring(1, 100)}`);
 
   url = "http://127.0.0.1:8989/healthcheck";
   options = {
