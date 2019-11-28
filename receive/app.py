@@ -205,7 +205,7 @@ def save_and_process():
         emacs_cleanup_org(org_path)
         shutil.move(str(org_path), str(org_path_final))
 
-    resp = flask.jsonify(success=True)
+    resp = flask.jsonify(success=False)
     return resp
 
 
