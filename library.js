@@ -1,17 +1,3 @@
-const publish = async (url, options) => {
-  return new Promise((resolve, reject) => {
-    fetchAsync(url, options)
-      .then(data => {
-        console.log(data);
-        resolve(data);
-      })
-      .catch(reason => {
-        console.log(reason.message);
-        reject(reason.message);
-      });
-  });
-};
-
 function cssElement(url) {
   var link = document.createElement("link");
   link.href = url;

@@ -17,6 +17,20 @@
 document.head.appendChild(cssElement(GM_getResourceURL("alertifyCSS")));
 document.head.appendChild(cssElement(GM_getResourceURL("alertifyThemeCSS")));
 
+const publish = async (url, options) => {
+  return new Promise((resolve, reject) => {
+    fetchAsync(url, options)
+      .then(data => {
+        console.log(data);
+        resolve(data);
+      })
+      .catch(reason => {
+        console.log(reason.message);
+        reject(reason.message);
+      });
+  });
+};
+
 function b64EncodeUnicode(str) {
   // first we use encodeURIComponent to get percent-encoded UTF-8,
   // then we convert the percent encodings into raw bytes which
