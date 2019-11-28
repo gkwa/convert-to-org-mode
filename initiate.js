@@ -48,23 +48,23 @@ function b64EncodeUnicode(str) {
 const sendPageToPort = async () => {
   let innerHTML = document.documentElement.innerHTML;
   let encodedString;
-  let url;
+  let urlbase = "http://127.0.0.1:8989";
   let options;
 
   encodedString = b64EncodeUnicode(innerHTML);
   console.log(`data substring:${encodedString.substring(1, 100)}`);
 
-  url = "http://127.0.0.1:8989/healthcheck";
   options = {
     method: "GET",
     headers: {
       "Content-Type": "application/json"
     }
   };
+  url = `${urlbase}/healthcheck`;
   publish(url, options)
     .then(data => {
       console.log(data);
-      alertify.notify("Endpoint is receiving", "success", 2, function() {
+      alertify.notify("Endpoint is open", "success", 2, function() {
         console.log("dismissed");
       });
     })
@@ -81,7 +81,6 @@ const sendPageToPort = async () => {
     title: document.title
   };
 
-  url = "http://127.0.0.1:8989/";
   options = {
     method: "POST",
     headers: {
@@ -89,6 +88,7 @@ const sendPageToPort = async () => {
     },
     body: JSON.stringify(data_dict)
   };
+  url = `${urlbase}`;
   publish(url, options)
     .catch(reason => {
       alertify.notify(reason, "error", 0, function() {
