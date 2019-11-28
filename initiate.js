@@ -21,18 +21,21 @@ function b64EncodeUnicode(str) {
   // first we use encodeURIComponent to get percent-encoded UTF-8,
   // then we convert the percent encodings into raw bytes which
   // can be fed into btoa.
-  return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g,
-    function toSolidBytes(match, p1) {
-      return String.fromCharCode('0x' + p1);
-    }));
+  return btoa(
+    encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function toSolidBytes(
+      match,
+      p1
+    ) {
+      return String.fromCharCode("0x" + p1);
+    })
+  );
 }
 
 const sendPageToPort = async () => {
-
   let innerHTML = document.documentElement.innerHTML;
   let encodedString;
 
-  encodedString = b64EncodeUnicode(innerHTML)
+  encodedString = b64EncodeUnicode(innerHTML);
   console.log(encodedString);
 
   let data_dict = {
@@ -40,7 +43,7 @@ const sendPageToPort = async () => {
     url: document.URL,
     data: encodedString,
     title: document.title
-  }
+  };
 
   let options = {
     method: "POST",
@@ -48,7 +51,7 @@ const sendPageToPort = async () => {
       "Content-Type": "application/json"
     },
     body: JSON.stringify(data_dict)
-  }
+  };
 
   let url = "http://127.0.0.1:8989/";
   publish(url, options)
@@ -63,9 +66,9 @@ const sendPageToPort = async () => {
         console.log("dismissed");
       });
     });
-}
+};
 
-(function () {
-  "use strict"
-  Mousetrap.bind('ctrl+s', sendPageToPort, 'keydown');
+(function() {
+  "use strict";
+  Mousetrap.bind("ctrl+s", sendPageToPort, "keydown");
 })();
