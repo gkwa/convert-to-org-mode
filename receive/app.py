@@ -167,6 +167,12 @@ def generate_filename_stem(title, host):
     return stem
 
 
+@app.route("/healthcheck")
+def healthcheck():
+    resp = flask.jsonify(success=True)
+    return resp
+
+
 @app.route("/", methods=["POST"])
 def save_and_process():
     if flask.request.method == "POST":
