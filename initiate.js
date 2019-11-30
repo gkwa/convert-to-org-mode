@@ -4,11 +4,8 @@
 // @version   1
 // @match     *://*/*
 // @require   https://craig.is/assets/js/mousetrap/mousetrap.min.js?9d308
-// @require   https://cdn.jsdelivr.net/npm/alertifyjs@1.12.0/build/alertify.min.js
 // @require   file:///Users/mtm/pdev/taylormonacelli/convert-to-org-mode/initiate.js
 // @require   file:///Users/mtm/pdev/taylormonacelli/convert-to-org-mode/library.js
-// @resource  alertifyCSS https://cdnjs.cloudflare.com/ajax/libs/AlertifyJS/1.12.0/css/alertify.min.css
-// @resource  alertifyThemeCSS https://cdnjs.cloudflare.com/ajax/libs/AlertifyJS/1.12.0/css/themes/default.min.css
 // @grant     GM_addStyle
 // @grant     GM_getResourceText
 // @grant     GM_getResourceURL
@@ -41,27 +38,6 @@ function b64EncodeUnicode(str) {
   );
 }
 
-function alertHealthStatus(url) {
-  let options = {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json"
-    }
-  };
-
-  publish(url, options)
-    .then(data => {
-      alertify.notify("Endpoint is open", "success", 2, function() {
-        console.log("alertifyjs reporting: dismissed");
-      });
-    })
-    .catch(reason => {
-      alertify.notify(reason.message, "error", 0, function() {
-        console.log("alertifyjs reporting: dismissed");
-      });
-    });
-}
-
 function sendPageToPort(url) {
   let innerHTML = document.documentElement.innerHTML;
   let encodedString = b64EncodeUnicode(innerHTML);
@@ -83,31 +59,15 @@ function sendPageToPort(url) {
   };
 
   publish(url, options)
-    .then(data => {
-      alertify.notify("Save completed", "success", 0, function() {
-        console.log("alertifyjs reporting: dismissed");
-      });
-    })
+    .then(data => {})
     .catch(reason => {
-      alertify.notify(reason.message, "error", 0, function() {
-        console.log("alertifyjs reporting: dismissed");
-      });
+      console.log(reason);
     });
 }
 
 const initiateWorkflow = async url => {
-  // its a long running task so first just give status to say whether
-  // endpoint is available
-  alertHealthStatus(`${url}/healthcheck`);
-
-  // meat
   sendPageToPort(url);
 };
-
-function alertifySetup() {
-  document.head.appendChild(cssElement(GM_getResourceURL("alertifyCSS")));
-  document.head.appendChild(cssElement(GM_getResourceURL("alertifyThemeCSS")));
-}
 
 (function() {
   "use strict";
@@ -124,7 +84,6 @@ function alertifySetup() {
     // 2ND PART OF SCRIPT RUN GOES HERE.
     // This is the equivalent of @run-at document-end
     console.log("==> 2nd part of script run.", new Date());
-    alertifySetup();
   }
 
   function pageFullyLoaded() {
@@ -141,5 +100,4 @@ function alertifySetup() {
     },
     "keydown"
   );
-  alertifySetup();
 })();
