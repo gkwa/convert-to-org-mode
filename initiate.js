@@ -41,22 +41,14 @@ function b64EncodeUnicode(str) {
   );
 }
 
-const sendPageToPort = async () => {
-  let innerHTML = document.documentElement.innerHTML;
-  let encodedString;
-  let urlbase = "http://127.0.0.1:8989";
-  let options;
-
-  encodedString = b64EncodeUnicode(innerHTML);
-  console.log(`debug data substring: ${encodedString.substring(1, 100)}`);
-
-  options = {
+function alertHealthStatus(url) {
+  let options = {
     method: "GET",
     headers: {
       "Content-Type": "application/json"
     }
   };
-  url = `${urlbase}/healthcheck`;
+
   publish(url, options)
     .then(data => {
       alertify.notify("Endpoint is open", "success", 2, function() {
@@ -68,6 +60,12 @@ const sendPageToPort = async () => {
         console.log("alertifyjs reporting: dismissed");
       });
     });
+}
+
+function sendPageToPort(url) {
+  let innerHTML = document.documentElement.innerHTML;
+  let encodedString = b64EncodeUnicode(innerHTML);
+  console.log(`debug data substring: ${encodedString.substring(1, 100)}`);
 
   let data_dict = {
     host: window.location.host,
@@ -76,14 +74,14 @@ const sendPageToPort = async () => {
     title: document.title
   };
 
-  options = {
+  let options = {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
     },
     body: JSON.stringify(data_dict)
   };
-  url = `${urlbase}`;
+
   publish(url, options)
     .then(data => {
       alertify.notify("Save completed", "success", 0, function() {
@@ -95,7 +93,21 @@ const sendPageToPort = async () => {
         console.log("alertifyjs reporting: dismissed");
       });
     });
+}
+
+const initiateWorkflow = async url => {
+  // its a long running task so first just give status to say whether
+  // endpoint is available
+  alertHealthStatus(`${url}/healthcheck`);
+
+  // meat
+  sendPageToPort(url);
 };
+
+function alertifySetup() {
+  document.head.appendChild(cssElement(GM_getResourceURL("alertifyCSS")));
+  document.head.appendChild(cssElement(GM_getResourceURL("alertifyThemeCSS")));
+}
 
 (function() {
   "use strict";
@@ -112,11 +124,7 @@ const sendPageToPort = async () => {
     // 2ND PART OF SCRIPT RUN GOES HERE.
     // This is the equivalent of @run-at document-end
     console.log("==> 2nd part of script run.", new Date());
-
-    document.head.appendChild(cssElement(GM_getResourceURL("alertifyCSS")));
-    document.head.appendChild(
-      cssElement(GM_getResourceURL("alertifyThemeCSS"))
-    );
+    alertifySetup();
   }
 
   function pageFullyLoaded() {
@@ -126,7 +134,12 @@ const sendPageToPort = async () => {
   console.log("==> Script end.", new Date());
   // ------------------------------
 
-  Mousetrap.bind("ctrl+s", sendPageToPort, "keydown");
-  document.head.appendChild(cssElement(GM_getResourceURL("alertifyCSS")));
-  document.head.appendChild(cssElement(GM_getResourceURL("alertifyThemeCSS")));
+  Mousetrap.bind(
+    "ctrl+s",
+    function() {
+      initiateWorkflow("http://127.0.0.1:8989");
+    },
+    "keydown"
+  );
+  alertifySetup();
 })();
