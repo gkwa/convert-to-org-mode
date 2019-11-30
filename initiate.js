@@ -62,7 +62,7 @@ function alertHealthStatus(url) {
     });
 }
 
-function sendPageToPort(url) {
+function sendCurrentPageToEndpoint(url) {
   let innerHTML = document.documentElement.innerHTML;
   let encodedString = b64EncodeUnicode(innerHTML);
   console.log(`debug data substring: ${encodedString.substring(1, 100)}`);
@@ -101,7 +101,7 @@ const initiateWorkflow = async url => {
   alertHealthStatus(`${url}/healthcheck`);
 
   // meat
-  sendPageToPort(url);
+  sendCurrentPageToEndpoint(url);
 };
 
 function alertifySetup() {
