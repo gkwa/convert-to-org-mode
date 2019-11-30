@@ -4,14 +4,8 @@
 // @version   1
 // @match     *://*/*
 // @require   https://craig.is/assets/js/mousetrap/mousetrap.min.js?9d308
-// @require   https://cdn.jsdelivr.net/npm/alertifyjs@1.12.0/build/alertify.min.js
 // @require   file:///Users/mtm/pdev/taylormonacelli/convert-to-org-mode/initiate.js
 // @require   file:///Users/mtm/pdev/taylormonacelli/convert-to-org-mode/library.js
-// @resource  alertifyCSS https://cdnjs.cloudflare.com/ajax/libs/AlertifyJS/1.12.0/css/alertify.min.css
-// @resource  alertifyThemeCSS https://cdnjs.cloudflare.com/ajax/libs/AlertifyJS/1.12.0/css/themes/default.min.css
-// @grant     GM_addStyle
-// @grant     GM_getResourceText
-// @grant     GM_getResourceURL
 // ==/UserScript==
 
 const publish = async (url, options) => {
@@ -50,15 +44,11 @@ function alertHealthStatus(url) {
   };
 
   publish(url, options)
-    .then(data => {
-      alertify.notify("Endpoint is open", "success", 2, function() {
-        console.log("alertifyjs reporting: dismissed");
-      });
+    .then(() => {
+      console.log("Endpoint is open");
     })
     .catch(reason => {
-      alertify.notify(reason.message, "error", 0, function() {
-        console.log("alertifyjs reporting: dismissed");
-      });
+      console.log(`Error: ${reason.messsage}`);
     });
 }
 
@@ -83,15 +73,11 @@ function sendPageToPort(url) {
   };
 
   publish(url, options)
-    .then(data => {
-      alertify.notify("Save completed", "success", 0, function() {
-        console.log("alertifyjs reporting: dismissed");
-      });
+    .then(() => {
+      console.log("Save completed");
     })
     .catch(reason => {
-      alertify.notify(reason.message, "error", 0, function() {
-        console.log("alertifyjs reporting: dismissed");
-      });
+      console.log(`Error: ${reason.messsage}`);
     });
 }
 
@@ -103,11 +89,6 @@ const initiateWorkflow = async url => {
   // meat
   sendPageToPort(url);
 };
-
-function alertifySetup() {
-  document.head.appendChild(cssElement(GM_getResourceURL("alertifyCSS")));
-  document.head.appendChild(cssElement(GM_getResourceURL("alertifyThemeCSS")));
-}
 
 (function() {
   "use strict";
@@ -124,7 +105,6 @@ function alertifySetup() {
     // 2ND PART OF SCRIPT RUN GOES HERE.
     // This is the equivalent of @run-at document-end
     console.log("==> 2nd part of script run.", new Date());
-    alertifySetup();
   }
 
   function pageFullyLoaded() {
@@ -141,5 +121,4 @@ function alertifySetup() {
     },
     "keydown"
   );
-  alertifySetup();
 })();
