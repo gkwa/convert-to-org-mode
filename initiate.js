@@ -150,10 +150,11 @@ function alertifySetup() {
   }
 
   console.log("==> Script end.", new Date());
+  alertifySetup();
   // ------------------------------
 
   Mousetrap.bind(
-    "ctrl+s",
+    "g s",
     function() {
       initiateWorkflow("http://127.0.0.1:8989");
     },
