@@ -133,6 +133,7 @@ function alertifySetup() {
   console.log("==> Script start.", new Date());
 
   // 1ST PART OF SCRIPT RUN GOES HERE.
+  alertifySetup();
   console.log("==> 1st part of script run.", new Date());
 
   document.addEventListener("DOMContentLoaded", DOM_ContentReady);
