@@ -69,7 +69,7 @@ function alertHealthStatus(url) {
 
   publish(url, options)
     .then(data => {
-      alertify.notify("Endpoint is open", "success", 2, function() {
+      alertify.notify("Endpoint is open", "success", 1, function() {
         console.log("alertifyjs reporting: dismissed");
       });
     })
@@ -102,7 +102,7 @@ function sendCurrentPageToEndpoint(url) {
 
   publish(url, options)
     .then(data => {
-      alertify.notify("Save completed", "success", 0, function() {
+      alertify.notify("Save completed", "success", 1, function() {
         console.log("alertifyjs reporting: dismissed");
       });
     })
