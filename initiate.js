@@ -6,13 +6,31 @@
 // @require   https://craig.is/assets/js/mousetrap/mousetrap.min.js?9d308
 // @require   https://cdn.jsdelivr.net/npm/alertifyjs@1.12.0/build/alertify.min.js
 // @require   file:///Users/mtm/pdev/taylormonacelli/convert-to-org-mode/initiate.js
-// @require   file:///Users/mtm/pdev/taylormonacelli/convert-to-org-mode/library.js
 // @resource  alertifyCSS https://cdnjs.cloudflare.com/ajax/libs/AlertifyJS/1.12.0/css/alertify.min.css
 // @resource  alertifyThemeCSS https://cdnjs.cloudflare.com/ajax/libs/AlertifyJS/1.12.0/css/themes/default.min.css
 // @grant     GM_addStyle
 // @grant     GM_getResourceText
 // @grant     GM_getResourceURL
 // ==/UserScript==
+
+function cssElement(url) {
+  var link = document.createElement("link");
+  link.href = url;
+  link.rel = "stylesheet";
+  link.type = "text/css";
+  return link;
+}
+
+async function fetchAsync(url, options) {
+  // await response of fetch call
+  let response = await fetch(url, options);
+  // only proceed once promise is resolved
+  let data = await response.json();
+  console.log(`data: ${data}`);
+
+  // only proceed once second promise is resolved
+  return data;
+}
 
 const publish = async (url, options) => {
   return new Promise((resolve, reject) => {
