@@ -59,30 +59,6 @@ function b64EncodeUnicode(str) {
   );
 }
 
-function alertHealthStatus(url) {
-  let options = {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json"
-    }
-  };
-
-  publish(url, options)
-    .then(() => {
-      alertify.notify("Endpoint is open", "success", 1, function() {
-        console.log("alertifyjs reporting: dismissed");
-      });
-    })
-    .then(() => {
-      sendCurrentPageToEndpoint("http://127.0.0.1:8989");
-    })
-    .catch(reason => {
-      alertify.notify(reason.message, "error", 0, function() {
-        console.log("alertifyjs reporting: dismissed");
-      });
-    });
-}
-
 function sendCurrentPageToEndpoint(url) {
   let innerHTML = document.documentElement.innerHTML;
   let encodedString = b64EncodeUnicode(innerHTML);
@@ -117,9 +93,29 @@ function sendCurrentPageToEndpoint(url) {
 }
 
 const initiateWorkflow = async url => {
+  let options = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json"
+    }
+  };
+
   // its a long running task so first just give status to say whether
   // endpoint is available
-  alertHealthStatus(`${url}/healthcheck`);
+  publish(`${url}/healthcheck`, options)
+    .then(() => {
+      alertify.notify("Endpoint is open", "success", 1, function() {
+        console.log("alertifyjs reporting: dismissed");
+      });
+    })
+    .then(() => {
+      sendCurrentPageToEndpoint(url);
+    })
+    .catch(reason => {
+      alertify.notify(reason.message, "error", 0, function() {
+        console.log("alertifyjs reporting: dismissed");
+      });
+    });
 };
 
 function alertifySetup() {
