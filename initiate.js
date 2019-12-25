@@ -73,6 +73,9 @@ function alertHealthStatus(url) {
         console.log("alertifyjs reporting: dismissed");
       });
     })
+    .then(() => {
+      sendCurrentPageToEndpoint("http://127.0.0.1:8989");
+    })
     .catch(reason => {
       alertify.notify(reason.message, "error", 0, function() {
         console.log("alertifyjs reporting: dismissed");
@@ -117,9 +120,6 @@ const initiateWorkflow = async url => {
   // its a long running task so first just give status to say whether
   // endpoint is available
   alertHealthStatus(`${url}/healthcheck`);
-
-  // meat
-  sendCurrentPageToEndpoint(url);
 };
 
 function alertifySetup() {
