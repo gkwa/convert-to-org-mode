@@ -1,4 +1,4 @@
-FROM silex/emacs
+FROM silex/emacs:alpine
 
 COPY . .
 
