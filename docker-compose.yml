@@ -21,8 +21,5 @@ services:
     restart: unless-stopped
     working_dir: "/"
     volumes:
-      - "scratch:/tmp/scratch"
+      - "/tmp/scratch:/tmp/scratch"
       - "/var/run/docker.sock:/var/run/docker.sock"
-
-volumes:
-  scratch: {}
