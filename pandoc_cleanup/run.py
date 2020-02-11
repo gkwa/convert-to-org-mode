@@ -39,5 +39,5 @@ if args.fix_html:
 if args.org:
     org_path = pathlib.Path(args.org)
     text = transform.transform(org_path.read_text())
-    logger.debug(f"writing to {org_path.resolve()}")
+#    logger.debug(f"writing to {org_path.resolve()}")
     org_path.write_text(text)
