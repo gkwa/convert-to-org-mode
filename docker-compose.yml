@@ -1,26 +1,18 @@
-version: '3.7'
+version: '3'
 
 services:
 
   tidy:
     build: tidy
-    volumes:
-      - myorgfiles:/tmp/scratch
 
   pandoc_cleanup:
     build: pandoc_cleanup
-    volumes:
-      - myorgfiles:/tmp/scratch
 
   emacs_cleanup:
     build: emacs_cleanup
-    volumes:
-      - myorgfiles:/tmp/scratch
 
   pandoc:
     image: pandoc/core
-    volumes:
-      - myorgfiles:/tmp/scratch
 
   flask-receive-html:
     build: receive
@@ -29,9 +21,5 @@ services:
     restart: unless-stopped
     working_dir: /
     volumes:
-      - myorgfiles:/tmp/scratch
+      - "/tmp/scratch:/tmp/scratch"
       - /var/run/docker.sock:/var/run/docker.sock
-
-volumes:
-  myorgfiles:
-    name: myorgfiles
