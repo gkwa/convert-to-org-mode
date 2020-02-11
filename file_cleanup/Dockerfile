@@ -1,3 +1,3 @@
 FROM alpine
 
-ENTRYPOINT find /tmp/scratch -mmin +1 -type f -not -name *.org -delete
+CMD find /tmp/scratch -mmin +1 -type f -not -name '*.org' -delete
