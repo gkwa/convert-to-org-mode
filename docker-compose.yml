@@ -17,9 +17,9 @@ services:
   flask-receive-html:
     build: receive
     ports:
-      - "127.0.0.1:8989:5000"
+      - 127.0.0.1:8989:5000
     restart: unless-stopped
-    working_dir: "/"
+    working_dir: /
     volumes:
       - "/tmp/scratch:/tmp/scratch"
-      - "/var/run/docker.sock:/var/run/docker.sock"
+      - /var/run/docker.sock:/var/run/docker.sock
