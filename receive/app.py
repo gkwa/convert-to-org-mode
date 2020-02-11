@@ -21,6 +21,16 @@ def remove_old_files(directory):
         "--mount",
         f"src=myorgfiles,dst={directory}",
         "convert-to-org-mode_file-cleanup",
+        "find",
+        "/tmp/scratch",
+        "-mmin",
+        "+1",
+        "-type",
+        "f",
+        "-not",
+        "-name",
+        "'*.org'",
+        "-delete",
     ]
 
     app.logger.debug(" ".join(cmd))
