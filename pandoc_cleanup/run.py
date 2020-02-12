@@ -1,6 +1,5 @@
 import argparse
 import logging
-import os
 import pathlib
 
 import transform
