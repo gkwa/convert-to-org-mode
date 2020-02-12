@@ -1,4 +1,5 @@
 import argparse
+import datetime
 import logging
 import pathlib
 
@@ -40,3 +41,25 @@ if args.org:
     text = transform.transform(org_path.read_text())
     #    logger.debug(f"writing to {org_path.resolve()}")
     org_path.write_text(text)
+
+
+mydir = html_path.parent
+now = datetime.datetime.now()
+for_keeps = set(".org")
+
+for path in mydir.glob("*"):
+    mtime = datetime.datetime.fromtimestamp(path.stat().st_mtime)
+    age = now - mtime
+    is_directory = not path.is_file()
+    if is_directory:
+        continue
+
+    is_young = age <= datetime.timedelta(minutes=10)
+    if is_young:
+        continue
+
+    is_keep_worthy = path.suffix.lower() in for_keeps and age <= datetime.timedelta(days=7)
+    if is_keep_worthy:
+        continue
+
+    path.unlink()
