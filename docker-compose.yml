@@ -32,11 +32,6 @@ services:
       - myorgfiles:/tmp/scratch
       - /var/run/docker.sock:/var/run/docker.sock
 
-  file-cleanup:
-    build: file_cleanup
-    volumes:
-      - myorgfiles:/tmp/scratch
-
 volumes:
   myorgfiles:
     name: myorgfiles
