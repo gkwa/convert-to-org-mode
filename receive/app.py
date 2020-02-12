@@ -7,6 +7,7 @@ import subprocess
 
 import contractions
 import flask
+
 import flask_cors
 
 app = flask.Flask(__name__)
