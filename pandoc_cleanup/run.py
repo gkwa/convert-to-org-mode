@@ -1,5 +1,4 @@
 import argparse
-import datetime
 import logging
 import pathlib
 
@@ -41,29 +40,3 @@ if args.org:
     text = transform.transform(org_path.read_text())
     #    logger.debug(f"writing to {org_path.resolve()}")
     org_path.write_text(text)
-
-
-mydir = html_path.parent
-all_ = set(mydir.glob("*"))
-org = set(mydir.glob("*.org"))
-destroy = set()
-
-now = datetime.datetime.now()
-for path in all_:
-    mtime = datetime.datetime.fromtimestamp(path.stat().st_mtime)
-    diff = now - mtime
-    if path.is_file() and diff > datetime.timedelta(days=1):
-        destroy.add(path)
-
-# keep org files
-destroy -= org
-
-# delete org files older than 30 days
-for path in org:
-    mtime = datetime.datetime.fromtimestamp(path.stat().st_mtime)
-    diff = now - mtime
-    if diff > datetime.timedelta(days=30):
-        destroy.add(path)
-
-for file in destroy:
-    file.unlink()

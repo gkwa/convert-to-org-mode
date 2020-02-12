@@ -13,6 +13,28 @@ app = flask.Flask(__name__)
 cors = flask_cors.CORS(app, resources={r"/*": {"origins": "*"}})
 
 
+def storage_cleanup(path_str):
+    cmd = [
+        "docker",
+        "run",
+        "--mount",
+        f"src=myorgfiles,dst={html_path.parent}",
+        "convert-to-org-mode_storage_cleanup",
+        "python",
+        "cleanup.py",
+        "--path",
+        path_str,
+    ]
+
+    app.logger.debug(" ".join(cmd))
+    process = subprocess.Popen(
+        cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=html_path.parent
+    )
+    _, stderr = process.communicate()
+    if stderr:
+        app.logger.warning(stderr)
+
+
 def tidy(html_path, tidy_path):
     cmd = [
         "docker",
@@ -203,6 +225,7 @@ def save_and_process():
         pandoc_cleanup_org(org_path)
         emacs_cleanup_org(org_path)
         shutil.move(str(org_path), str(org_path_final))
+        storage_cleanup(str(html_path.parent))
 
     resp = flask.jsonify(success=True)
     return resp
