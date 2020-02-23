@@ -1,5 +1,7 @@
 FROM python:3.8-alpine
 
+RUN pip install --upgrade pip
+
 RUN apk update && apk add docker-cli
 
 COPY . .
