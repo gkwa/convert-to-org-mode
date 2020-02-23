@@ -4,6 +4,7 @@ import re
 import shutil
 import string
 import subprocess
+from datetime import datetime
 
 import contractions
 import flask
@@ -151,6 +152,8 @@ def emacs_cleanup_org(org_path):
 
 
 def generate_filename_stem(title, host):
+    dt = datetime.now()
+
     stem = f"app-{host}-{title}"
     keep = string.ascii_letters + string.digits + " "
 
@@ -163,6 +166,7 @@ def generate_filename_stem(title, host):
     stem = re.sub("-{2,}", "-", stem)
     stem = stem[:100]
     stem = re.sub("-+$", "", stem)
+    stem = f"{stem}-{dt.strftime('%j-%M')}"
     return stem
 
 
