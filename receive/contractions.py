@@ -1,8 +1,8 @@
-"""
-this code is not mine! i shamelessly copied it from http://stackoverflow.com/questions/19790188/expanding-english-language-contractions-in-python
+"""copied from
+http://stackoverflow.com/questions/19790188/expanding-english-language-contractions-in-python
 all credits go to alko and arturomp @ stack overflow.
 
-basically, it's a big find/replace.
+it's a big find/replace
 """
 
 import re
