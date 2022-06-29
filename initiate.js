@@ -1,6 +1,7 @@
 // ==UserScript==
 // @name      convert-to-org-mode
 // @namespace https://taylorm.net
+// @description my stuff
 // @version   1
 // @match     *://*/*
 // @require   https://craig.is/assets/js/mousetrap/mousetrap.min.js?9d308
