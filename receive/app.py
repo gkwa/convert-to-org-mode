@@ -20,7 +20,7 @@ def tidy(html_path, tidy_path):
         "run",
         "--mount",
         f"src=myorgfiles,dst={html_path.parent}",
-        "convert-to-org-mode_tidy",
+        "convert-to-org-mode-tidy",
         "-file",
         str(html_path.parent.joinpath(f"{html_path.stem}-tidy-errors.log")),
         str(html_path),
