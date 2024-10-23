@@ -1,4 +1,4 @@
-FROM python:3.8-alpine as base
+FROM python:3.13-alpine as base
 FROM base as builder
 
 RUN pip install --upgrade pip
