@@ -1,2 +1,2 @@
 beautifulsoup4==4.12.3
-panflute==1.11.2
+panflute==1.12.5
