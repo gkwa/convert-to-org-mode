@@ -1,4 +1,4 @@
-FROM python:3.13-alpine@sha256:5dad625efcbc6fad19c10b7b2bfefa1c7a8129c8f8343106b639c27dd9e7db2c
+FROM python:3.13-alpine@sha256:657dbdb20479a6523b46c06114c8fec7db448232f956a429d3cc0606d30c1b59
 
 RUN pip install --upgrade pip
 
