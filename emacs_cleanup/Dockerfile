@@ -1,4 +1,4 @@
-FROM silex/emacs@sha256:611477e3ef02606ad93fa07c581691893e88fd4f7972f6586bd596480e5f1a9f
+FROM silex/emacs@sha256:3abecf530cd54e9d6e72f60a7f9b228a4273310de40170cc0bc8d2aed2adeda1
 
 COPY . .
 
