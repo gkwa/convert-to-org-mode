@@ -1,2 +1,2 @@
-beautifulsoup4==4.12.3
+beautifulsoup4==4.13.4
 panflute==2.3.1
