@@ -13,7 +13,7 @@ services:
     volumes:
     - myorgfiles:/tmp/scratch
   pandoc:
-    image: pandoc/core@sha256:771842ce6f661785e0e12931f82ea64046d70fa48ea5cff480492d79ab3b8ff1
+    image: pandoc/core@sha256:3ff4301f49f60ea85d8d7e6660dda8ec4beb08ffbe9ae826129fbeb828b2b92c
     volumes:
     - myorgfiles:/tmp/scratch
   flask-receive-html:
